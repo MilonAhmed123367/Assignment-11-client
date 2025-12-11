@@ -1,0 +1,43 @@
+import { createBrowserRouter } from "react-router";
+import RootLayout from "../layouts/RootLayout";
+import Home from "../Pages/Home/Home";
+import JoinEmployee from "../Pages/JoinEmployee";
+import JoinHrManager from "../Pages/JoinHrManager";
+import AuthLayout from "../layouts/AuthLayout";
+import Login from "../Pages/Auth/Login";
+import Register from "../Pages/Auth/Register";
+
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: RootLayout,
+    children: [
+      {
+        index: true,
+        Component: Home
+      },
+      {
+        path: 'JoinEmployee',
+        element: <JoinEmployee></JoinEmployee>
+      },
+      {
+        path: 'JoinManager',
+        element: <JoinHrManager></JoinHrManager>
+      },
+    ]
+  },
+  {
+    path:'/',
+    Component: AuthLayout,
+    children:[
+      {
+        path: '/login',
+        Component: Login
+      },
+      {
+        path: '/register',
+        Component: Register
+      },
+    ]
+  }
+])
