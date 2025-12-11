@@ -21,17 +21,44 @@ const NavBar = () => {
 
 
   const links = <>
-    <li className='text-xl font-semibold text-gray-500'><NavLink to="/">Home</NavLink></li>
+    <li className='text-xl font-semibold text-gray-500'>
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          `pb-1 ${isActive ? "border-b-4 border-primary text-primary" : ""}`
+        }
+        end
+      >
+        Home
+      </NavLink>
+    </li>
 
-    <li className='text-xl font-semibold text-gray-500'><NavLink to="/JoinEmployee">Join as Employee</NavLink></li>
+    <li className='text-xl font-semibold text-gray-500'>
+      <NavLink
+        to="/JoinEmployee"
+        className={({ isActive }) =>
+          `pb-1 ${isActive ? "border-b-4 border-primary text-primary" : ""}`
+        }
+      >
+        Join as Employee
+      </NavLink>
+    </li>
 
-    <li className='text-xl font-semibold text-gray-500'><NavLink to="/JoinManager">Join as HR Manager</NavLink></li>
-
+    <li className='text-xl font-semibold text-gray-500'>
+      <NavLink
+        to="/JoinManager"
+        className={({ isActive }) =>
+          `pb-1 ${isActive ? "border-b-4 border-primary text-primary" : ""}`
+        }
+      >
+        Join as HR Manager
+      </NavLink>
+    </li>
   </>
 
 
   return (
-    <div className="navbar p-4 sm:p-5 border-b-2 border-gray-100 bg-white sticky top-0 z-50">
+    <div className="navbar p-4 sm:p-5 rounded-b-2xl bg-white sticky top-0 z-50 shadow shadow-secondary">
 
       {/* Start */}
       <div className="navbar-start">

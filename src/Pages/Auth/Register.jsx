@@ -17,32 +17,34 @@ const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const selectedRole = watch("role");
+  const selectedRole = watch("role"); // Watch role
 
   const handleRegistration = async (data) => {
     try {
-      // Step 1: Firebase user creation
+      // Firebase user creation
       await registerUser(data.email, data.password);
 
-      // Step 2: Upload profile photo to ImgBB
-      const imgFormData = new FormData();
-      imgFormData.append("image", data.photo[0]);
+      // ImgBB upload only if HR uploads photo
+      let photoURL = "";
+      if (data.role === "hr" && data.photo && data.photo.length > 0) {
+        const imgFormData = new FormData();
+        imgFormData.append("image", data.photo[0]);
+        const imageUploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
+        const imgRes = await axios.post(imageUploadURL, imgFormData);
+        photoURL = imgRes.data.data.url;
+      }
 
-      const imageUploadURL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
-      const imgRes = await axios.post(imageUploadURL, imgFormData);
-      const photoURL = imgRes.data.data.url;
-
-      // Step 3: Prepare user object
+      // Prepare user object
       let userInfo = {
         name: data.name,
         email: data.email,
         password: data.password,
         dateOfBirth: data.dateOfBirth,
         role: data.role,
-        photoURL,
+        ...(selectedRole === "hr" ? { photoURL } : {}),
       };
 
-      // Add HR fields if role is HR
+      // Add HR extra fields
       if (data.role === "hr") {
         userInfo = {
           ...userInfo,
@@ -54,20 +56,11 @@ const Register = () => {
         };
       }
 
-      // Step 4: Save user to backend (MongoDB)
-      const saveRes = await axios.post(
-        "http://localhost:5000/api/register",
-        userInfo
-      );
-      console.log("User saved to DB:", saveRes.data);
+      await axios.post("http://localhost:5000/api/register", userInfo);
 
-      // Step 5: Update Firebase Profile
-      await updateUserProfile({
-        displayName: data.name,
-        photoURL,
-      });
+      // Update Firebase profile with name/photo
+      await updateUserProfile({ displayName: data.name, photoURL });
 
-      // Step 6: Redirect user
       navigate(location.state || "/");
     } catch (error) {
       console.error("Registration Failed:", error.response?.data || error.message);
@@ -75,136 +68,148 @@ const Register = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto max-w-md shadow-xl p-6">
-      <h3 className="text-3xl text-center font-bold">Create an Account</h3>
-      <p className="text-center text-gray-500 mb-3">Register with ZapShift</p>
+    <div className="w-full mx-auto max-w-3xl p-6">
+      <h3 className="text-4xl text-center bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text font-bold">Create an Account</h3>
 
-      {/* Avatar Placeholder */}
-      <div className="flex justify-center mb-4">
-        <div className="avatar">
-          <div className="w-20 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-3xl">👤</span>
-          </div>
-        </div>
-      </div>
+      <form
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4"
+        onSubmit={handleSubmit(handleRegistration)}
+      >
 
-      <form className="card-body" onSubmit={handleSubmit(handleRegistration)}>
-        <fieldset className="fieldset space-y-2">
-
-          {/* Name */}
+        {/* ----- NAME ----- */}
+        <div className="col-span-1">
           <label className="label">Name</label>
           <input
             type="text"
-            {...register("name", { required: true })}
-            className="input input-bordered"
-            placeholder="Full Name"
+            {...register("name", { required: "Name is required" })}
+            className="input input-bordered w-full"
           />
-          {errors.name && <p className="text-red-500">Name is required.</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
+        </div>
 
-          {/* Date of Birth */}
+        {/* ----- DATE OF BIRTH ----- */}
+        <div className="col-span-1">
           <label className="label">Date of Birth</label>
           <input
             type="date"
-            {...register("dateOfBirth", { required: true })}
-            className="input input-bordered"
+            {...register("dateOfBirth", { required: "Date of birth is required" })}
+            className="input input-bordered w-full"
           />
           {errors.dateOfBirth && (
-            <p className="text-red-500">Date of birth is required.</p>
+            <p className="text-red-500 text-sm">{errors.dateOfBirth.message}</p>
           )}
+        </div>
 
-          {/* Photo Upload */}
-          <label className="label">Photo</label>
-          <input
-            type="file"
-            {...register("photo", { required: true })}
-            className="file-input file-input-bordered"
-          />
-          {errors.photo && <p className="text-red-500">Photo is required.</p>}
+        {/* ----- PHOTO for HR ONLY ----- */}
+        {selectedRole === "hr" && (
+          <div className="col-span-2">
+            <label className="label">Photo</label>
+            <input
+              type="file"
+              {...register("photo", {
+                required: "Photo is required for HR",
+              })}
+              className="file-input file-input-bordered w-full"
+            />
+            {errors.photo && (
+              <p className="text-red-500 text-sm">{errors.photo.message}</p>
+            )}
+          </div>
+        )}
 
-          {/* Role */}
+        {/* ----- ROLE ----- */}
+        <div className="col-span-1">
           <label className="label">Register As</label>
           <select
-            {...register("role", { required: true })}
-            className="select select-bordered"
+            {...register("role", { required: "Role is required" })}
+            className="select select-bordered w-full"
           >
+            <option value="">Select Role</option>
             <option value="employee">Employee</option>
             <option value="hr">HR Manager</option>
           </select>
-
-          {/* HR Only Fields */}
-          {selectedRole === "hr" && (
-            <>
-              <label className="label">Company Name</label>
-              <input
-                type="text"
-                {...register("companyName", { required: true })}
-                className="input input-bordered"
-                placeholder="Your Company Name"
-              />
-              {errors.companyName && (
-                <p className="text-red-500">Company name is required.</p>
-              )}
-
-              <label className="label">Company Logo URL</label>
-              <input
-                type="text"
-                {...register("companyLogo", { required: true })}
-                className="input input-bordered"
-                placeholder="Company Logo URL (ImgBB/Cloudinary)"
-              />
-              {errors.companyLogo && (
-                <p className="text-red-500">Company logo URL required.</p>
-              )}
-            </>
+          {errors.role && (
+            <p className="text-red-500 text-sm">{errors.role.message}</p>
           )}
+        </div>
 
-          {/* Email */}
+        {/* ----- COMPANY NAME (HR) ----- */}
+        {selectedRole === "hr" && (
+          <div className="col-span-1">
+            <label className="label">Company Name</label>
+            <input
+              type="text"
+              {...register("companyName", { required: "Company name is required" })}
+              className="input input-bordered w-full"
+            />
+            {errors.companyName && (
+              <p className="text-red-500 text-sm">{errors.companyName.message}</p>
+            )}
+          </div>
+        )}
+
+        {/* ----- COMPANY LOGO (HR) ----- */}
+        {selectedRole === "hr" && (
+          <div className="col-span-1">
+            <label className="label">Company Logo URL</label>
+            <input
+              type="text"
+              {...register("companyLogo", { required: "Company logo URL is required" })}
+              className="input input-bordered w-full"
+            />
+            {errors.companyLogo && (
+              <p className="text-red-500 text-sm">{errors.companyLogo.message}</p>
+            )}
+          </div>
+        )}
+
+        {/* ----- EMAIL ----- */}
+        <div className="col-span-1">
           <label className="label">Email</label>
           <input
             type="email"
-            {...register("email", { required: true })}
-            className="input input-bordered"
-            placeholder="Email Address"
+            {...register("email", { required: "Email is required" })}
+            className="input input-bordered w-full"
           />
-          {errors.email && <p className="text-red-500">Email is required.</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
+        </div>
 
-          {/* Password */}
+        {/* ----- PASSWORD ----- */}
+        <div className="col-span-1">
           <label className="label">Password</label>
           <input
             type="password"
             {...register("password", {
-              required: true,
-              minLength: 6,
+              required: "Password is required",
+              minLength: { value: 6, message: "Minimum 6 characters" },
             })}
-            className="input input-bordered"
-            placeholder="Password"
+            className="input input-bordered w-full"
           />
-          {errors.password?.type === "required" && (
-            <p className="text-red-500">Password is required.</p>
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
-          {errors.password?.type === "minLength" && (
-            <p className="text-red-500">Minimum 6 characters required</p>
-          )}
+        </div>
 
-          <button className="btn bg-lime-300 hover:bg-lime-400 mt-4 w-full">
-            Register
-          </button>
-        </fieldset>
-
-        <p className="text-center mt-3">
-          Already have an account?{" "}
-          <Link
-            state={location.state}
-            to="/login"
-            className="text-green-500 underline"
-          >
-            Login
-          </Link>
-        </p>
+        {/* ----- SUBMIT BUTTON ----- */}
+        <button className="btn btn-primary col-span-2 mt-4 bg-gradient-to-r from-secondary to-primary hover:scale-103 transition-transform duration-300">
+          Register
+        </button>
       </form>
 
+      {/* ----- LOGIN LINK ----- */}
+      <p className="text-center mt-3">
+        Already have an account?{" "}
+        <Link state={location.state} to="/login" className="text-blue-500 underline">
+          Login
+        </Link>
+      </p>
+
       <div className="divider">Or</div>
-      <Google></Google>
+      <Google />
     </div>
   );
 };

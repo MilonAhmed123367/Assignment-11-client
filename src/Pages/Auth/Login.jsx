@@ -25,8 +25,8 @@ const Login = () => {
 
     return (
         <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
-            <h3 className="text-3xl text-center">Welcome back</h3>
-            <p className='text-center'>Please Login</p>
+            <h3 className="text-3xl text-center bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text font-bold">Welcome back</h3>
+            <p className='text-center font-semibold'>Please Login</p>
             <form className="card-body" onSubmit={handleSubmit(handleLogin)}>
                 <fieldset className="fieldset">
                     {/* email field */}
@@ -44,10 +44,9 @@ const Login = () => {
                     }
 
 
-                    <div><a className="link link-hover">Forgot password?</a></div>
-                    <button className="btn btn-neutral mt-4">Login</button>
+                    <button className="btn text-white text-sm mt-4 bg-gradient-to-r from-secondary to-primary hover:scale-103 transition-transform duration-300">Login</button>
                 </fieldset>
-                <p>New to Zap Shift <Link
+                <p>New to AssetVerse? <Link
                     state={location.state}
                     className='text-blue-400 underline'
                     to="/register">Register</Link></p>

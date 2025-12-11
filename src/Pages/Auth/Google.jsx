@@ -25,11 +25,14 @@ const Google = () => {
       };
 
       // Step 3: Send to backend (MongoDB)
-      const res = await axiosSecure.post('/api/register', userInfo);
+      const res = await axiosSecure.post('/api/google-register', userInfo);
+
       console.log('User saved to DB:', res.data);
 
       // Step 4: Redirect after login
-      navigate(location.state || '/');
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
+
     } catch (error) {
       console.error('Google Sign-In failed:', error.response?.data || error.message);
     }
@@ -37,12 +40,12 @@ const Google = () => {
 
   return (
     <div className="flex flex-col items-center justify-center  bg-gray-50">
-      <div className="card w-full max-w-md shadow-xl p-6 bg-white">
+      <div className="card w-full max-w-md p-6 bg-gray-50">
         <h2 className="text-2xl font-bold text-center mb-4">Sign In with Google</h2>
-        
+
         <button
           onClick={handleGoogleSignIn}
-          className="btn flex items-center justify-center gap-2 bg-white text-black border border-gray-300 w-full"
+          className="btn flex items-center justify-center gap-2 bg-white text-black border border-gray-300 w-full hover:scale-105 transition-transform duration-300"
         >
           <svg
             aria-label="Google logo"
