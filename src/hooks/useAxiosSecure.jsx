@@ -1,49 +1,26 @@
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import useAuth from './useAuth';
-import { useNavigate } from 'react-router';
+import axios from "axios";
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000'
-})
+  // নিশ্চিত করুন লাস্টে যেন '/' না থাকে
+  baseURL: "https://assignment-11-server-git-main-milon-ahmeds-projects.vercel.app",
+  withCredentials: true
+});
 
 const useAxiosSecure = () => {
-    const { user, logOut } = useAuth();
-    const navigate = useNavigate();
+  axiosSecure.interceptors.request.use(
+    function (config) {
+      const token = localStorage.getItem('access-token');
+      if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    function (error) {
+      return Promise.reject(error);
+    }
+  );
 
-    useEffect(() => {
-        // intercept request
-        const reqInterceptor = axiosSecure.interceptors.request.use(config => {
-            config.headers.Authorization = `Bearer ${user?.accessToken}`
-            return config
-        })
-
-        // interceptor response
-        const resInterceptor = axiosSecure.interceptors.response.use((response) => {
-            return response;
-        }, (error) => {
-            console.log(error);
-
-            const statusCode = error.status;
-            if (statusCode === 401 || statusCode === 403) {
-                logOut()
-                    .then(() => {
-                        navigate('/login')
-                    })
-            }
-
-
-            return Promise.reject(error);
-        })
-
-        return () => {
-            axiosSecure.interceptors.request.eject(reqInterceptor);
-            axiosSecure.interceptors.response.eject(resInterceptor);
-        }
-
-    }, [user, logOut, navigate])
-
-    return axiosSecure;
+  return axiosSecure;
 };
 
 export default useAxiosSecure;

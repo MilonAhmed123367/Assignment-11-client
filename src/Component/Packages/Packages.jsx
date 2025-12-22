@@ -1,97 +1,51 @@
-import React, { useEffect, useState } from "react";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { FaCheck } from "react-icons/fa";
+import React from "react";
+import { motion } from "framer-motion";
+import { FaCheckCircle } from "react-icons/fa";
 
 const Packages = () => {
-  const axiosSecure = useAxiosSecure();
-  const [packages, setPackages] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axiosSecure
-      .get("/packages")
-      .then((res) => {
-        setPackages(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch packages:", err);
-        setLoading(false);
-      });
-  }, [axiosSecure]);
-
-  if (loading) {
-    return (
-      <div className="py-20 text-center text-xl font-semibold text-gray-600">
-        Loading Packages...
-      </div>
-    );
-  }
+  const plans = [
+    { name: "Starter", price: "$5", members: "5 Employees", color: "border-slate-200" },
+    { name: "Growth", price: "$8", members: "10 Employees", color: "border-primary" },
+    { name: "Pro", price: "$15", members: "20 Employees", color: "border-slate-200" },
+  ];
 
   return (
-    <div className="py-20 px-5 bg-gradient-to-b from-gray-50 to-white">
-      <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text mb-12">
-        Subscription Packages
-      </h2>
+    <div className="py-20 bg-[#f8fafc] px-6">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl font-black text-center text-primary mb-16">
+          Affordable <span className="text-secondary">Packages</span>
+        </h2>
 
-      <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
-        {packages.map((pkg,) => (
-          <div
-            key={pkg._id}
-            className={`
-              relative group flex flex-col justify-between p-8 rounded-2xl border-2 transition transform hover:-translate-y-2 hover:shadow-2xl
-              ${
-                pkg.recommended
-                  ? "border-indigo-500 bg-indigo-50"
-                  : "border-gray-200 bg-white"
-              }
-            `}
-          >
-            {/* Badge */}
-            {pkg.recommended && (
-              <div className="absolute top-0 right-0 -mt-3 -mr-3 bg-indigo-600 text-white py-1 px-3 rounded-full text-sm font-semibold shadow-lg">
-                Most Popular
+        {/* Grid Layout with equal sizing */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {plans.map((plan, i) => (
+            <motion.div
+              key={i}
+              whileHover={{ y: -10 }}
+              className={`bg-white p-8 rounded-[2rem] border-2 ${plan.color} shadow-sm flex flex-col justify-between h-full`}
+            >
+              <div>
+                <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
+                <div className="text-4xl font-black text-primary mb-6">
+                  {plan.price}<span className="text-lg text-gray-400 font-medium">/month</span>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-2 text-gray-600">
+                    <FaCheckCircle className="text-secondary" /> {plan.members}
+                  </li>
+                  <li className="flex items-center gap-2 text-gray-600">
+                    <FaCheckCircle className="text-secondary" /> Full Asset Tracking
+                  </li>
+                </ul>
               </div>
-            )}
 
-            {/* Title */}
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              {pkg.name}
-            </h3>
-
-            {/* Price */}
-            <div className=" mb-4">
-              <span className="text-5xl font-extrabold text-primary">
-                ${pkg.price}
-              </span>
-              <span className="text-lg text-gray-600">/mo</span>
-            </div>
-
-            {/* Limit */}
-            <p className=" text-gray-700 font-medium mb-4">
-              Up to{" "}
-              <span className="text-secondary font-bold">
-                {pkg.employeeLimit}
-              </span>{" "}
-              employees
-            </p>
-
-            {/* Feature List */}
-            <ul className="space-y-3 mb-6 text-gray-700">
-              {pkg.features.map((feature, i) => (
-                <li key={i} className="flex items-center gap-3">
-                  <FaCheck className="text-primary" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            {/* CTA Button */}
-            <button className="mt-auto bg-primary text-white font-semibold py-2 rounded-xl hover:bg-indigo-700 transition">
-              Choose Plan
-            </button>
-          </div>
-        ))}
+              {/* Consistent Button Style */}
+              <button className="w-full bg-primary hover:bg-secondary text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary/20">
+                Purchase Plan
+              </button>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,58 +1,91 @@
 import React from "react";
+import { motion } from "framer-motion";
+import { FaUserTie, FaUsers, FaBoxOpen, FaGlobe } from "react-icons/fa6";
 
 const HowItWorks = () => {
   const steps = [
     {
-      title: "HR Managers register their company",
-      desc: "They receive a default subscription package (5 employees).",
+      title: "HR Managers Register",
+      desc: "Register your company and get a default subscription package for 5 employees to start managing assets.",
+      icon: <FaUserTie className="text-3xl" />,
+      color: "from-blue-500 to-indigo-600",
     },
     {
-      title: "Employees register independently",
-      desc: "They get automatically affiliated with the correct company.",
+      title: "Employee Affiliation",
+      desc: "Employees register independently and are automatically linked to their correct company via email domain.",
+      icon: <FaUsers className="text-3xl" />,
+      color: "from-purple-500 to-pink-600",
     },
     {
-      title: "Asset Tracking",
-      desc: "Assets move from Inventory → Assignment → Return.",
+      title: "Smart Asset Tracking",
+      desc: "A complete lifecycle management: from Inventory entry to Assignment and seamless Returns.",
+      icon: <FaBoxOpen className="text-3xl" />,
+      color: "from-orange-500 to-red-600",
     },
     {
-      title: "Multi‑company support",
-      desc: "Employees can work with multiple companies at once.",
+      title: "Multi-Company Support",
+      desc: "Versatile architecture allows employees to collaborate with multiple companies through a single dashboard.",
+      icon: <FaGlobe className="text-3xl" />,
+      color: "from-green-500 to-teal-600",
     },
   ];
 
   return (
-    <div className="py-16 px-6 bg-gray-100">
-      <div className="max-w-5xl mx-auto text-center">
-
-        {/* Section Title */}
-        <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-secondary to-primary text-transparent bg-clip-text mb-12">
-          How the System Works
-        </h2>
+    <section className="py-20 px-6 bg-[#f8fafc]">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Section Heading */}
+        <div className="text-center mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl md:text-5xl font-extrabold text-primary mb-4"
+          >
+            How the System <span className="text-secondary">Works</span>
+          </motion.h2>
+          <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
+          <p className="mt-6 text-gray-500 max-w-2xl mx-auto text-lg">
+            Our streamlined process ensures your asset management is efficient, transparent, and scalable.
+          </p>
+        </div>
 
         {/* Steps Grid */}
-        <div className="grid gap-8 sm:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <div
+            <motion.div
               key={i}
-              className="relative p-6 bg-white rounded-xl shadow hover:shadow-lg transition"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              whileHover={{ y: -10 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100 flex flex-col items-center text-center relative group overflow-hidden"
             >
-              {/* Number Badge */}
-              <div className="absolute -top-3 -left-3 bg-secondary text-white w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg">
-                {i + 1}
+              {/* Animated Background Blur on Hover */}
+              <div className={`absolute -bottom-20 -right-20 w-40 h-40 bg-gradient-to-br ${step.color} opacity-5 group-hover:opacity-10 rounded-full transition-all duration-500`}></div>
+
+              {/* Icon Container */}
+              <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${step.color} text-white flex items-center justify-center shadow-lg transform group-hover:rotate-6 transition-transform`}>
+                {step.icon}
               </div>
 
-              {/* Title */}
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              {/* Step Number */}
+              <span className="absolute top-6 right-8 text-6xl font-black text-gray-50 opacity-10 group-hover:opacity-20 transition-opacity">
+                0{i + 1}
+              </span>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold text-gray-800 mb-4 relative z-10">
                 {step.title}
               </h3>
-
-              {/* Description */}
-              <p className="text-gray-700">{step.desc}</p>
-            </div>
+              <p className="text-gray-500 leading-relaxed relative z-10">
+                {step.desc}
+              </p>
+            </motion.div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
