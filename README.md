@@ -1,16 +1,84 @@
-# React + Vite
+# AssetVerse | Corporate Asset Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**AssetVerse** is a comprehensive B2B digital platform designed to help companies efficiently manage their physical assets (laptops, keyboards, chairs, etc.) and track equipment assignments. It simplifies inventory management, improves accountability, and streamlines the asset request process for employees.
 
-Currently, two official plugins are available:
+## 🚀 Live Link
+[**View Live Deployment**](https://assignment-11-milon-ahmed.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 📖 Project Overview
+AssetVerse bridges the gap between HR Managers and Employees. HR Managers can track their inventory and manage staff, while employees can easily request necessary tools for their work. The system is designed to prevent asset loss and reduce administrative overhead.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### **Key Features**
+* **Dual Role Dashboard:** Distinct interfaces for HR Managers and Employees.
+* **Asset Management:** Comprehensive tracking of "Returnable" and "Non-returnable" items.
+* **Request Workflow:** Seamless process for employees to request assets and HR to approve/reject them.
+* **Automatic Affiliation:** Employees become affiliated with a company upon their first approved request.
+* **Data Visualization:** Interactive charts using Recharts to visualize asset distribution.
+* **PDF Reporting:** Employees can generate a print-ready list of their assigned assets.
+* **Responsive UI:** Fully optimized for Mobile, Tablet, and Desktop using DaisyUI.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+**Frontend:**
+* React.js
+* Tailwind CSS & **DaisyUI**
+* Framer Motion (for animations)
+* Recharts (for analytics)
+* Axios (for API handling)
+
+**Backend:**
+* Node.js & Express.js
+* MongoDB (Database)
+* Firebase Auth (Authentication)
+
+---
+
+## 📦 Packages Used
+* `framer-motion`: For smooth UI transitions and hero animations.
+* `recharts`: To display asset statistics for HR.
+* `react-to-print`: For generating asset assignment reports.
+* `sweetalert2`: For professional user feedback and alerts.
+* `react-datepicker`: For managing dates in requests and profiles.
+* `lucide-react`: For clean corporate icons.
+
+---
+
+## ⚙️ Local Setup Instructions
+
+1.  **Clone the repositories:**
+    ```bash
+    git clone server (https://github.com/MilonAhmed123367/Assignment-11-Server.git)
+
+    git clone client (https://github.com/MilonAhmed123367/Assignment-11-client.git)
+    ```
+
+2.  **Install Dependencies:**
+    ```bash
+    # Run in both client and server folders
+    npm install
+    ```
+ 
+
+    
+
+3.  **Run Locally:**
+    ```bash
+    # Client
+    npm run dev
+    # Server
+    node index.js
+    ```
+
+---
+
+## 🔐 Credentials for Testing
+* **HR Manager Email:** `Milon@khanHr.com`
+* **Password:** `Milonkhan12345?
+`
+
+---
+
+**Developed with ❤️ by [Milon miya]**
