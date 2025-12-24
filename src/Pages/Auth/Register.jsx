@@ -33,7 +33,6 @@ const Register = () => {
         photoURL = imgRes.data.data.url;
       }
 
-      // 3️⃣ ব্যাকএন্ডের জন্য অবজেক্ট তৈরি করা
       const userInfo = {
         name: data.name,
         email: data.email.toLowerCase(),
@@ -80,7 +79,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50/50 py-12 shadow-2xl ">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-4xl bg-white rounded-[3rem] shadow-2xl shadow-primary/5 border border-slate-100 overflow-hidden"
@@ -93,18 +92,18 @@ const Register = () => {
               Start managing your company assets with ease and efficiency.
             </p>
             <div className="mt-10 space-y-6">
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">1</div>
-                    <p className="text-sm font-bold">Personal Details</p>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">2</div>
-                    <p className="text-sm font-bold">Account Role</p>
-                </div>
-                <div className="flex items-center gap-4 opacity-50">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">3</div>
-                    <p className="text-sm font-bold">Company Info</p>
-                </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">1</div>
+                <p className="text-sm font-bold">Personal Details</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">2</div>
+                <p className="text-sm font-bold">Account Role</p>
+              </div>
+              <div className="flex items-center gap-4 opacity-50">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center italic font-serif">3</div>
+                <p className="text-sm font-bold">Company Info</p>
+              </div>
             </div>
           </div>
 
@@ -170,7 +169,7 @@ const Register = () => {
               {/* Dynamic HR Fields */}
               <AnimatePresence>
                 {selectedRole === "hr" && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
@@ -217,7 +216,7 @@ const Register = () => {
                 />
               </div>
 
-              <button 
+              <button
                 disabled={loading}
                 className="w-full bg-primary text-white font-black py-4 rounded-2xl hover:bg-secondary transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3 disabled:opacity-70 mt-4 active:scale-95"
               >
